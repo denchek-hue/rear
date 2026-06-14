@@ -31,9 +31,11 @@ $data    = $stmt->fetchAll();
 if (!empty($data)) {
     $newBags = '';
     foreach ($data as $bag) {
+        $imgSrc = (strpos($bag['img'], 'http') === 0) ? htmlspecialchars($bag['img']) : '';
+        $imgTag = $imgSrc ? '<img src="' . $imgSrc . '" alt="">' : '<span style="font-size:3rem;">&#128084;</span>';
         $newBags .= '
         <div class="card product-card fade-up">
-            <div class="product-img"><img src="/' . htmlspecialchars($bag['img']) . '" alt=""></div>
+            <div class="product-img">' . $imgTag . '</div>
             <div class="product-info">
                 <div class="product-brand">' . htmlspecialchars($bag['brand']) . '</div>
                 <h3>' . htmlspecialchars($bag['name']) . '</h3>
@@ -56,9 +58,11 @@ $data    = $stmt->fetchAll();
 if (!empty($data)) {
     $topBags = '';
     foreach ($data as $bag) {
+        $imgSrc = (strpos($bag['img'], 'http') === 0) ? htmlspecialchars($bag['img']) : '';
+        $imgTag = $imgSrc ? '<img src="' . $imgSrc . '" alt="">' : '<span style="font-size:3rem;">&#128084;</span>';
         $topBags .= '
         <div class="card product-card fade-up">
-            <div class="product-img"><img src="/' . htmlspecialchars($bag['img']) . '" alt=""></div>
+            <div class="product-img">' . $imgTag . '</div>
             <div class="product-info">
                 <div class="product-brand">' . htmlspecialchars($bag['brand']) . '</div>
                 <h3>' . htmlspecialchars($bag['name']) . '</h3>

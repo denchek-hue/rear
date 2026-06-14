@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../database/db.php';
+require_once '../lib/S3Client.php';
 
 if (!isset($_SESSION['logged_in'])) {
     header("Location: /authorization/loginPage.php");
@@ -11,21 +12,17 @@ $stmt->execute([$_SESSION['logged_id']]);
 $role = $stmt->fetchColumn();
 if ($role !== 'admin') { header("Location: /index.php"); exit; }
 
-$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/img/';
-if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
-
 // Удаление товара
 if (isset($_GET['delete_bag'])) {
     $id = (int)$_GET['delete_bag'];
     $imgRow = $pdo->prepare("SELECT img FROM bag WHERE id = ?");
     $imgRow->execute([$id]);
-    $imgPath = $imgRow->fetchColumn();
+    $imgUrl = $imgRow->fetchColumn();
     $pdo->prepare("DELETE FROM basket_bag WHERE bag_id = ?")->execute([$id]);
     $pdo->prepare("DELETE FROM bag_info WHERE bag_id = ?")->execute([$id]);
     $pdo->prepare("DELETE FROM bag WHERE id = ?")->execute([$id]);
-    if ($imgPath && strpos($imgPath, 'img/') === 0) {
-        $f = $_SERVER['DOCUMENT_ROOT'] . '/' . $imgPath;
-        if (file_exists($f)) unlink($f);
+    if ($imgUrl && strpos($imgUrl, 'http') === 0) {
+        s3Delete($imgUrl);
     }
     $_SESSION['massage'] = "Товар удалён.";
     header("Location: /admin/admin.php"); exit;
@@ -73,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_bag'])) {
         $file    = $_FILES['photo'];
         $ext     = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         $allowed = ['jpg','jpeg','png','webp','gif'];
+        $mimeMap  = ['jpg'=>'image/jpeg','jpeg'=>'image/jpeg','png'=>'image/png','webp'=>'image/webp','gif'=>'image/gif'];
         if (!in_array($ext, $allowed)) {
             $_SESSION['massage'] = "Ошибка: допустимые форматы — jpg, png, webp, gif.";
             header("Location: /admin/admin.php"); exit;
@@ -82,10 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_bag'])) {
             header("Location: /admin/admin.php"); exit;
         }
         $filename = 'bag_' . time() . '_' . mt_rand(100,999) . '.' . $ext;
-        if (move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
-            $imgPath = 'img/' . $filename;
-        } else {
-            $_SESSION['massage'] = "Ошибка загрузки файла. Проверь права на папку /img/.";
+        try {
+            $imgPath = s3Upload($file['tmp_name'], $filename, $mimeMap[$ext]);
+        } catch (RuntimeException $e) {
+            $_SESSION['massage'] = "Ошибка загрузки в S3: " . $e->getMessage();
             header("Location: /admin/admin.php"); exit;
         }
     }
@@ -230,9 +228,8 @@ if (isset($_SESSION['massage'])) { $message = $_SESSION['massage']; unset($_SESS
               <?php foreach ($bags as $bag): ?>
                 <tr>
                   <td>
-                    <?php $f = $_SERVER['DOCUMENT_ROOT'].'/'.$bag['img'];
-                    if ($bag['img'] && file_exists($f)): ?>
-                      <img class="bag-thumb" src="/<?php echo htmlspecialchars($bag['img']); ?>" alt="">
+                    <?php if ($bag['img'] && strpos($bag['img'], 'http') === 0): ?>
+                      <img class="bag-thumb" src="<?php echo htmlspecialchars($bag['img']); ?>" alt="">
                     <?php else: ?>
                       <div class="bag-ph">&#128084;</div>
                     <?php endif; ?>

@@ -140,13 +140,12 @@ if (isset($_SESSION['massage'])) { $message = $_SESSION['massage']; unset($_SESS
               data-brand="<?php echo htmlspecialchars($bag['brand']); ?>"
               data-price="<?php echo number_format($bag['price'],0,'.',' '); ?> руб."
               data-description="<?php echo htmlspecialchars($bag['description'] ?? ''); ?>"
-              data-img="/<?php echo htmlspecialchars($bag['img']); ?>"
+              data-img="<?php echo (strpos($bag['img'], 'http') === 0) ? htmlspecialchars($bag['img']) : ''; ?>"
               data-id="<?php echo $bag['id']; ?>"
               data-rating="<?php echo $bag['rating']; ?>">
               <div class="bag-img" onclick="openBagModal(this.closest('.bag-card'))" style="cursor:pointer;">
-                <?php $imgFull = $_SERVER['DOCUMENT_ROOT'].'/'.$bag['img'];
-                if ($bag['img'] && file_exists($imgFull)): ?>
-                  <img src="/<?php echo htmlspecialchars($bag['img']); ?>" alt="<?php echo htmlspecialchars($bag['name']); ?>">
+                <?php if ($bag['img'] && strpos($bag['img'], 'http') === 0): ?>
+                  <img src="<?php echo htmlspecialchars($bag['img']); ?>" alt="<?php echo htmlspecialchars($bag['name']); ?>">
                 <?php else: ?>
                   <span style="font-size:3.5rem;">&#128084;</span>
                 <?php endif; ?>
