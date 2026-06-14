@@ -3,7 +3,9 @@ session_start();
 require_once '../database/db.php';
 
 $brand_filter = isset($_GET['brand']) ? (int)$_GET['brand'] : 0;
-$price_max    = isset($_GET['price_max']) ? (int)$_GET['price_max'] : 999999;
+$max_price_db  = (int)$pdo->query("SELECT COALESCE(MAX(price),10000) FROM bag")->fetchColumn();
+$max_price_db  = max($max_price_db, 1000);
+$price_max     = isset($_GET['price_max']) ? (int)$_GET['price_max'] : $max_price_db;
 $sort         = isset($_GET['sort']) ? $_GET['sort'] : 'id_desc';
 
 $navBtn = '<li><a class="btn btn-outline" href="/authorization/loginPage.php">Войти / Регистрация</a></li>';
@@ -107,8 +109,8 @@ if (isset($_SESSION['massage'])) { $message = $_SESSION['massage']; unset($_SESS
             </select>
           </div>
           <div class="filter-group">
-            <label>Макс. цена: <span id="priceVal"><?php echo ($price_max==999999?'10000':$price_max); ?> руб.</span></label>
-            <input type="range" name="price_max" min="1000" max="10000" step="500" value="<?php echo min($price_max,10000); ?>" oninput="document.getElementById('priceVal').textContent=this.value+' руб.'">
+            <label>Макс. цена: <span id="priceVal"><?php echo $price_max; ?> руб.</span></label>
+            <input type="range" name="price_max" min="0" max="<?php echo $max_price_db; ?>" step="<?php echo max(1, (int)round($max_price_db/20)); ?>" value="<?php echo min($price_max, $max_price_db); ?>" oninput="document.getElementById('priceVal').textContent=this.value+' руб.'">
           </div>
           <div class="filter-group">
             <label>Сортировка</label>
