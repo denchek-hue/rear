@@ -1,0 +1,39 @@
+:root {
+  --bg: #faf8f5; --surface: #f0ece6; --card: #ffffff;
+  --primary: #8b5e3c; --accent: #c9956a; --text: #2d1f14;
+  --text-muted: #7a6655; --radius: 14px; --shadow: 0 8px 24px rgba(139,94,60,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem 1rem;
+  background: radial-gradient(circle at 60% 40%, rgba(201,149,106,0.15), transparent 60%), var(--bg);
+}
+.modal { display: flex; align-items: center; justify-content: center; width: 100%; }
+.modal-content {
+  background: var(--card); padding: 2rem; border-radius: var(--radius);
+  width: 100%; max-width: 440px; box-shadow: var(--shadow);
+  border: 1px solid rgba(139,94,60,0.1); position: relative;
+}
+.modal-content h2 { font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--text); }
+.close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--text-muted); text-decoration: none; }
+.close-modal:hover { color: var(--text); }
+
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.btn-primary { background: var(--primary); color: white; width: 100%; }
+.btn-primary:hover { background: #6e4a2e; }
+
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: 0.4rem; font-weight: 500; color: var(--text); }
+.form-group input {
+  width: 100%; padding: 0.8rem; background: var(--surface);
+  border: 1px solid rgba(139,94,60,0.15); border-radius: 8px;
+  color: var(--text); outline: none; transition: 0.2s; font-family: inherit;
+}
+.form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139,94,60,0.1); }
+#massage { color: #dc2626; font-size: 0.9rem; margin-bottom: 0.8rem; min-height: 1.2em; }
+#massagePass { color: #dc2626; font-size: 0.85rem; margin-bottom: 0.5rem; }

@@ -1,0 +1,39 @@
+:root {
+  --bg: #faf8f5; --surface: #f0ece6; --card: #ffffff;
+  --primary: #8b5e3c; --accent: #c9956a; --text: #2d1f14;
+  --text-muted: #7a6655; --radius: 14px; --shadow: 0 8px 24px rgba(139,94,60,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); line-height: 1.6; }
+a { color: inherit; text-decoration: none; }
+
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 2rem 1rem;
+  background: radial-gradient(circle at 70% 30%, rgba(201,149,106,0.1), transparent 60%), var(--bg);
+}
+.modal { display: flex; align-items: flex-start; justify-content: center; width: 100%; padding-top: 2rem; }
+.modal-content {
+  background: var(--card); padding: 2rem; border-radius: var(--radius);
+  width: 100%; max-width: 600px; box-shadow: var(--shadow);
+  border: 1px solid rgba(139,94,60,0.1); position: relative;
+}
+.modal-content h2 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--text); }
+.close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--text-muted); text-decoration: none; }
+.close-modal:hover { color: var(--text); }
+
+.profile-info p { margin-bottom: 0.5rem; color: var(--text); }
+.profile-info a { color: var(--primary); font-size: 0.9rem; }
+
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: #6e4a2e; }
+.btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+.card { background: var(--surface); padding: 1.2rem; border-radius: var(--radius); border: 1px solid rgba(139,94,60,0.1); margin-bottom: 1rem; }
+.card h3 { font-size: 1rem; color: var(--text); }
+.badge { display: inline-block; padding: 0.2rem 0.6rem; background: rgba(139,94,60,0.12); color: var(--primary); border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+.meta { display: flex; justify-content: space-between; margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem; }
+.section-label { font-size: 1.2rem; font-weight: 700; margin: 1.5rem 0 0.8rem; color: var(--text); }
