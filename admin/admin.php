@@ -105,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_bag'])) {
     }
     $_SESSION['massage'] = "Товар добавлен!";
     header("Location: /admin/admin.php"); exit;
-}
 
 $bags   = $pdo->query("SELECT b.id, b.name, b.price, b.rating, b.img, br.name AS brand FROM bag b LEFT JOIN brand br ON b.brand_id = br.id ORDER BY b.id DESC")->fetchAll();
 $brands = $pdo->query("SELECT id, name, (SELECT COUNT(*) FROM bag WHERE brand_id = brand.id) AS cnt FROM brand ORDER BY name")->fetchAll();
