@@ -1,10 +1,5 @@
 [phases.setup]
-nixPkgs = ["php", "mysql"]
+nixPkgs = ["php", "php83Extensions.pdo_mysql", "php83Extensions.mysqli", "php83Extensions.mbstring"]
 
-[phases.install]
-cmds = [
-  "docker-php-ext-install pdo pdo_mysql mysqli"
-]
-
-[phases.start]
-cmd = "php -S 0.0.0.0:$PORT"
+[start]
+cmd = "php -S 0.0.0.0:$PORT -t /app"
