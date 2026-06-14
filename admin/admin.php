@@ -205,7 +205,7 @@ if (isset($_SESSION['massage'])) { $message = $_SESSION['massage']; unset($_SESS
               </div>
             </div>
             <div class="fg"><label>Название сумки</label><input name="name" type="text" placeholder="Классическая кожаная сумка" required></div>
-            <div class="fg"><label>Цена (руб.)</label><input name="price" type="number" step="10" min="1" placeholder="3990" required></div>
+            <div class="fg"><label>Цена (руб.)</label><input name="price" type="number" step="any" min="0" placeholder="3990" required></div>
             <div class="fg">
               <label>Бренд</label>
               <select name="brand_id">
