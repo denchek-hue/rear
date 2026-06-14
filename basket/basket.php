@@ -87,7 +87,7 @@ if (isset($_SESSION['massage'])) {
 </head>
 <body>
 <section class="hero">
-  <div class="modal">
+  <div class="modal active">
     <div class="modal-content" style="max-width:560px;">
       <a class="close-modal" href="/index.php">&times;</a>
       <h2>Моя корзина</h2>
