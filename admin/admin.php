@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once '../database/db.php';
-require_once '../lib/S3Client.php';
 
 if (!isset($_SESSION['logged_in'])) {
     header("Location: /authorization/loginPage.php");
