@@ -72,7 +72,7 @@ if (isset($_SESSION['massage'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Корзина | DrunOwens</title>
-  <link rel="stylesheet" href="/css/profile.css">
+  <link rel="stylesheet" href="/css/style.css">
   <style>
     .basket-item { display:flex; align-items:center; gap:1rem; background:var(--surface); padding:1rem; border-radius:10px; margin-bottom:1rem; }
     .basket-item img-placeholder { font-size:2.5rem; flex-shrink:0; }
