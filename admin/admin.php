@@ -20,9 +20,9 @@ if (isset($_GET['delete_bag'])) {
     $pdo->prepare("DELETE FROM basket_bag WHERE bag_id = ?")->execute([$id]);
     $pdo->prepare("DELETE FROM bag_info WHERE bag_id = ?")->execute([$id]);
     $pdo->prepare("DELETE FROM bag WHERE id = ?")->execute([$id]);
-    if ($imgUrl && strpos($imgUrl, 'http') === 0) {
-        s3Delete($imgUrl);
-    }
+   if ($imgUrl && strpos($imgUrl, 'http') === false) {
+    @unlink($_SERVER['DOCUMENT_ROOT'] . '/' . $imgUrl);
+}
     $_SESSION['massage'] = "Товар удалён.";
     header("Location: /admin/admin.php"); exit;
 }
@@ -66,14 +66,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_bag'])) {
     $imgPath  = '';
 
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $file    = $_FILES['photo'];
-        $ext     = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-        $allowed = ['jpg','jpeg','png','webp','gif'];
-        $mimeMap  = ['jpg'=>'image/jpeg','jpeg'=>'image/jpeg','png'=>'image/png','webp'=>'image/webp','gif'=>'image/gif'];
-        if (!in_array($ext, $allowed)) {
-            $_SESSION['massage'] = "Ошибка: допустимые форматы — jpg, png, webp, gif.";
-            header("Location: /admin/admin.php"); exit;
-        }
+    $file    = $_FILES['photo'];
+    $ext     = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $allowed = ['jpg','jpeg','png','webp','gif'];
+    if (!in_array($ext, $allowed)) {
+        $_SESSION['massage'] = "Ошибка: допустимые форматы — jpg, png, webp, gif.";
+        header("Location: /admin/admin.php"); exit;
+    }
+    if ($file['size'] > 5 * 1024 * 1024) {
+        $_SESSION['massage'] = "Ошибка: файл слишком большой (макс. 5 МБ).";
+        header("Location: /admin/admin.php"); exit;
+    }
+    $filename = 'bag_' . time() . '_' . mt_rand(100,999) . '.' . $ext;
+    $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/img/';
+    if (move_uploaded_file($file['tmp_name'], $uploadDir . $filename)) {
+        $imgPath = 'img/' . $filename;
+    }
+}
         if ($file['size'] > 5 * 1024 * 1024) {
             $_SESSION['massage'] = "Ошибка: файл слишком большой (макс. 5 МБ).";
             header("Location: /admin/admin.php"); exit;
