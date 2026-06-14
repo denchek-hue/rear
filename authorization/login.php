@@ -8,9 +8,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userInput = trim($_POST['inputUser'] ?? '');
     $password  = $_POST['password'];
 
-    $sql  = "SELECT phone, email, password, userId FROM users WHERE phone = ? OR email = ?";
+    $sql  = "SELECT email, password, userId FROM users WHERE email = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userInput, $userInput]);
+    $stmt->execute([$userInput]);
 
     $user = $stmt->fetch();
 
